@@ -4,20 +4,8 @@ const config = require('./config')
 const db = {}
 
 const defaultData = {
-    workouts: [
-        {
-          id: "123i2pjo",
-          name: "Arm and chest",
-          laps: 2,
-          time: "30"
-        },
-        {
-          id: "podakp3",
-          name: "Insanity",
-          laps: 10,
-          time: "45"
-        },
-        {
+    workouts: {
+        "dpo3jkp4o": {
           id: "dpo3jkp4o",
           name: "Crossfit (Complete)",
           laps: "2",
@@ -25,18 +13,18 @@ const defaultData = {
           exercises: [
             {
               id: "asidjals",
-              time: '120',
+              time: '15',
               type: "wu",
               exname: "Warm up",
-              url: "R0mMyV5OtcM",
+              url: "https://www.youtube.com/watch?v=R0mMyV5OtcM",
               exlap: '0'
             },
             {
               id: "asdad312d",
-              time: '30',
+              time: '15',
               type: "wod",
               exname: "Push up",
-              url: "IODxDxX7oi4",
+              url: "https://www.youtube.com/watch?v=IODxDxX7oi4",
               exlap: '1'
             },
             {
@@ -48,10 +36,10 @@ const defaultData = {
             },
             {
               id: "d12d43v",
-              time: '30',
+              time: '15',
               type: "wod",
               exname: "Burpees",
-              url: "Uy2nUNX38xE",
+              url: "https://www.youtube.com/watch?v=Uy2nUNX38xE",
               exlap: '2'
             },
             {
@@ -63,8 +51,7 @@ const defaultData = {
             }
           ]
         }
-
-    ]
+    }
 }
 
 const get = (token) => {
@@ -80,19 +67,25 @@ const add = (token, workout) => {
   if (!workout.id) {
     workout.id = Math.random().toString(36).substr(-8)
   }
-  get(token).workouts.push(workout)
-  return workout
+  db[token].workouts[workout.id] = {
+    id: workout.id,
+    name: workout.name,
+    laps: workout.laps,
+    rest: workout.rest,
+    exercises: workout.exercises
+  }
+  return db[token].workouts[workout.id]
 }
 
-const update = async (token, workout) => {
-  const data = get(token);
-   const currentWorkout = await data.workouts.find(w => w.id === workout.id );
-  if(currentWorkout){
-    data.workouts = await data.workouts.filter(w => w.id !== workout.id);
+const update = (token, workout) => {
+  db[token].workouts[workout.id] = {
+    id: workout.id,
+    name: workout.name,
+    laps: workout.laps,
+    rest: workout.rest,
+    exercises: workout.exercises
   }
-  data.workouts.push(workout);
-  console.log(JSON.stringify(data.workouts));
-  return workout
+  return db[token].workouts;
 }
 
 module.exports = {

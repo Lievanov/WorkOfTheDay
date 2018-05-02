@@ -25,8 +25,9 @@ class ManageWorkout extends Component {
     if(this.props.match !== undefined){
       const { match: {params} } = this.props;
       if(Object.keys(params).length !== 0)
-      wodAPI.getAll().then((workouts) => {
-        const w = workouts.find(query => query.id  === params.id);
+      wodAPI.getAll().then(workouts => {
+        const w = workouts[params.id];
+        console.log(w);
         this.setState({ id: w.id, name: w.name, laps: w.laps, rest: w.rest, exercises: w.exercises })
       })
     }
@@ -34,7 +35,6 @@ class ManageWorkout extends Component {
 
   handleChange = (e) => {
     this.setState({[e.target.name]: e.target.value});
-    console.log(`${e.target.name} === ${e.target.value}`)
   }
 
   AvailableLaps = () => {
@@ -49,12 +49,11 @@ class ManageWorkout extends Component {
 
   deleteExercise = async (exerciseId) => {
     const { id, name, laps, rest, exercises } = this.state;
-    const removedExercise = await exercises.filter(e => e.id !== exerciseId)
-    await this.setState({ exercises: removedExercise })
+    await this.setState({ exercises: exercises.filter(e => e.id !== exerciseId) })
     const workout = {
-      id, name, laps, rest, removedExercise
+      id, name, laps, rest, exercises: exercises.filter(e => e.id !== exerciseId)
     }
-    console.log(workout);
+    console.log(workout)
     this.props.onUpdateWorkout(workout);
   }
 
@@ -71,6 +70,7 @@ class ManageWorkout extends Component {
 
   AddExercise = async () => {
     const { id, name, laps, rest, exercises, type, time, exrest, exname, url, exlap } = this.state;
+    let newId = "", newWorkout = false;
     if(name === ""){
       this.validations("Please, add a name !");
       return;
@@ -93,8 +93,13 @@ class ManageWorkout extends Component {
       this.validations("Exercise rest must be a number !");
       return;
     }
-    if(id === "")
-      await this.setState({id: Math.random().toString(36).substr(-8) })
+    if(id === ""){
+      newId = Math.random().toString(36).substr(-8);
+      await this.setState({id: newId })
+      newWorkout=true;
+    } else {
+      newId = id
+    }
 
     const exerciseList = exercises || [];
     const newExercise = {
@@ -125,9 +130,9 @@ class ManageWorkout extends Component {
       time: "0", exrest: "0", exname:'', url:'', exlap: ''
     })
     const workout = {
-      id, name, laps, rest, exercises
+      id: newId, name, laps, rest, exercises
     }
-    if(workout.id === ''){
+    if(newWorkout){
       this.props.onCreateWorkout(workout);
     } else {
       this.props.onUpdateWorkout(workout);

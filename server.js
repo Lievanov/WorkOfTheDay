@@ -56,17 +56,6 @@ app.post('/workouts', bodyParser.json(), (req, res) => {
   }
 })
 
-app.put('/workouts/', bodyParser.json(), (req, res) => {
-  const {name, laps, rest } = req.body
-  if(name && laps && rest){
-    console.log("Updating...");
-    res.send(db.update(req.token, req.body))
-  } else {
-    console.log('Error');
-    res.status(403).send({ error: 'please provide a name'})
-  }
-})
-
 app.put('/workouts/:id', bodyParser.json(), (req, res) => {
   const {name, laps, rest } = req.body
   if(name && laps && rest){

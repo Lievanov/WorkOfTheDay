@@ -7,6 +7,7 @@ import ListWorkouts from './components/ListWorkouts';
 import ManageWorkout from './components/ManageWorkout';
 import StartWorkout from "./components/StartWorkout";
 import FooterComp from './components/Footer';
+import * as utils from './utils/utils';
 
 class App extends Component {
 
@@ -17,7 +18,8 @@ class App extends Component {
 
   componentDidMount(){
     wodAPI.getAll().then((workouts) => {
-      this.setState({ workouts });
+      const workoutsList = utils.convertObjectoToArray(workouts);
+      this.setState({ workouts: workoutsList });
     })
   }
   createWorkout = workout => {
@@ -29,7 +31,12 @@ class App extends Component {
   }
 
   updateWorkout = workout => {
-    wodAPI.update(workout)
+    wodAPI.update(workout).then(workouts =>{
+      console.log("wk" + JSON.stringify(workouts));
+      this.setState(state => ({
+        workouts: utils.convertObjectoToArray(workouts)
+      }))
+    })
   }
 
   deleteWorkout = workout => {
@@ -65,10 +72,11 @@ class App extends Component {
           <ManageWorkout
             onUpdateWorkout={ workout => {
               this.updateWorkout(workout);
+              history.push(`/workout/${workout.id}`)
             }}
-            onCreateWorkout={ async workout => {
+            onCreateWorkout={ workout => {
               this.createWorkout(workout)
-              history.push(`/`)
+              history.push(`/workout/${workout.id}`)
             }}
           />
         )} />

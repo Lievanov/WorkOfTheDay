@@ -32,7 +32,7 @@ class StartWorkout extends Component {
 
         await wodAPI.getAll().then((workouts) => {
             this.setState({
-              workout: workouts.find((w) => w.id === params.id )
+              workout: workouts[params.id]
             });
         })
         const { exercises } = this.state.workout;
