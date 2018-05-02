@@ -1,0 +1,25 @@
+{
+  "name": "wod-db",
+  "version": "1.0.0",
+  "description": "Work of the day DB API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node server.js",
+    "client": "npm run start --prefix client",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "author": "Diego Lievano",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "clone": "^2.1.1",
+    "concurrently": "^3.5.1",
+    "cors": "^2.8.3",
+    "express": "^4.16.3"
+  }
+}

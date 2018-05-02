@@ -1,0 +1,113 @@
+.App {
+  padding: 0 7% 0 7%;
+}
+
+.workout-banner {
+  background-image: url("/workout-banner.png");
+  height: 175px;
+  background-size:cover;
+}
+
+.main-banner {
+  background-image: url("/main-banner.jpg");
+  height: 175px;
+  background-size:cover;
+}
+
+.workout-banner h3 {
+  background-color: black;
+  color: white;
+  width: 30%;
+}
+
+.show-laps {
+  text-align: center;
+  border-bottom:  solid;
+  border-color:  #d84315;
+}
+
+.main-title{
+  background-color: black;
+  color: white;
+  width: 340px;
+}
+
+.start-workout {
+    text-align: center;
+}
+
+.workout-title{
+  color: red;
+}
+
+.line {
+  text-align: center;
+  color: #26A69A;
+}
+
+.video-clock {
+  text-align: center;
+  height: 500px;
+  width: 300px;
+  border-left: dotted #4caf50;
+  padding: 25px;
+  margin: 25px;
+}
+
+.exercise-box {
+  border: 2px solid blue;
+  border-radius: 5px;
+  margin-top: 60px;
+  text-align: center;
+  box-shadow: 5px 10px #1976d2;
+}
+
+.current-exercise {
+  border: 2px solid #d84315;
+  border-radius: 5px;
+  margin-top: 60px;
+  margin-left: 40px;
+  text-align: center;
+  box-shadow: 5px 10px #d84315;
+}
+
+.workout-button {
+  margin-top: 65%;
+}
+
+.restart-button{
+  margin-top: 25px;
+  background: #b71c1c;
+}
+
+.no-video {
+  height: 280px;
+  width: 400px;
+  background-color: #546e7a;
+  padding-top: 50%;
+  text-align: center;
+  color: white;
+}
+
+.between-laps {
+  color: red;
+}
+
+.well-done {
+  text-align: center;
+  margin-top: 25%;
+  color: red;
+}
+.wrapper{
+  min-height: 100%;
+  margin-bottom: -50px;
+}
+
+.footer {
+  background: #42A5F5;
+  height: 30px;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  padding: 0 20px;
+}
