@@ -1,6 +1,7 @@
-import React from 'react';
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar, Button } from 'react-materialize'
+
 function Header() {
   return (
     <div>

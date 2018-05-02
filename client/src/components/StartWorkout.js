@@ -23,12 +23,13 @@ class StartWorkout extends Component {
       showVideo: false,
       done: false,
       betweenLap: false,
-      ytAutoPlay: true
+      ytAutoPlay: true,
+      isRestLap: false
     }
 
 
     async componentDidMount(){
-        const { match: {params} } = this.props;
+        const { match: {params}, addingLog } = this.props;
 
         await wodAPI.getAll().then((workouts) => {
             this.setState({
@@ -45,7 +46,8 @@ class StartWorkout extends Component {
           clock: exercises[0].time,
           nextExercise: exercises[1].exname || ""
         });
-
+        //Create logs
+        addingLog(this.state.workout);
     }
 
     startExercise = () =>{
@@ -62,7 +64,7 @@ class StartWorkout extends Component {
 
     restartExercise = () => {
       clearInterval(this.interval);
-      this.setState({ ytAutoPlay: false, previousExercise: "", resume: "Start", pause: true })
+      this.setState({ ytAutoPlay: false, previousExercise: "", resume: "Start", pause: true, betweenLap: false })
       this.componentDidMount();
     }
 
@@ -74,10 +76,8 @@ class StartWorkout extends Component {
         if(this.state.nextExercise === ""){
           clearInterval(this.interval);
           this.setState({done: true});
-          // add logs
         }else
           await this.exerciseChange();
-
       }
     }
 
@@ -88,17 +88,15 @@ class StartWorkout extends Component {
     exerciseChange = () => {
       const { exercises } = this.state.workout;
       if(this.state.betweenLap){
-        this.setState(prevState => {
-           return {
-             betweenLap: false,
-             clock: this.state.workout.rest,
-             ytAutoPlay: false,
-           }
+        this.setState({
+          isRestLap: true,
+          betweenLap: false,
+          ytAutoPlay: false,
+          clock: this.state.workout.rest
         })
       } else {
         this.setState(prevState => {
           return {
-            betweenLap: exercises[prevState.counter + 1].exlap > this.state.currentLap ? (this.state.currentLap > 0 ? true : false) : false,
             name: exercises[prevState.counter + 1].exname,
             clock: exercises[prevState.counter + 1].time,
             type: exercises[prevState.counter + 1].type,
@@ -106,11 +104,15 @@ class StartWorkout extends Component {
             currentLap: exercises[prevState.counter + 1].exlap,
             previousExercise: exercises[prevState.counter].exname,
             ytAutoPlay: exercises[prevState.counter].exname === "rest" ? false : true,
-            counter: prevState.counter + 1
+            counter: prevState.counter + 1,
+            isRestLap: false
           }
         })
         if(exercises[this.state.counter+1] !== undefined){
-          this.setState(prevState => {return { nextExercise: exercises[prevState.counter + 1].exname }});
+          this.setState(prevState => {return {
+            nextExercise: exercises[prevState.counter + 1].exname,
+            betweenLap: exercises[prevState.counter + 1].exlap > this.state.currentLap ? (this.state.currentLap > 0 ? true : false) : false
+          }});
         } else {
           this.setState({ nextExercise: '' });
         }

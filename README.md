@@ -1,8 +1,8 @@
-# Work of the day [![GitHub license] (https://img.shields.io/badge/license-MIT-blue.svg)]
+# Work of the day
 
 
 ### Introduction
-Work of the Day application is a high-intensity interval training web project for daily workouts well know as "Work of the Day".
+Work of the Day application is a high-intensity interval training web project for daily workouts also known as "WoD".
 
 In the application you would be able to:
 - Create your own interactive workouts with YouTube videos

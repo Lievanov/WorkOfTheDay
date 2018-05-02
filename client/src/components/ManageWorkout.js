@@ -27,7 +27,6 @@ class ManageWorkout extends Component {
       if(Object.keys(params).length !== 0)
       wodAPI.getAll().then(workouts => {
         const w = workouts[params.id];
-        console.log(w);
         this.setState({ id: w.id, name: w.name, laps: w.laps, rest: w.rest, exercises: w.exercises })
       })
     }
@@ -53,7 +52,6 @@ class ManageWorkout extends Component {
     const workout = {
       id, name, laps, rest, exercises: exercises.filter(e => e.id !== exerciseId)
     }
-    console.log(workout)
     this.props.onUpdateWorkout(workout);
   }
 

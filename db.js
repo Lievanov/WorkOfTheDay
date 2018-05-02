@@ -9,11 +9,11 @@ const defaultData = {
           id: "dpo3jkp4o",
           name: "Crossfit (Complete)",
           laps: "2",
-          rest: '120',
+          rest: '10',
           exercises: [
             {
               id: "asidjals",
-              time: '15',
+              time: '5',
               type: "wu",
               exname: "Warm up",
               url: "https://www.youtube.com/watch?v=R0mMyV5OtcM",
@@ -21,7 +21,7 @@ const defaultData = {
             },
             {
               id: "asdad312d",
-              time: '15',
+              time: '5',
               type: "wod",
               exname: "Push up",
               url: "https://www.youtube.com/watch?v=IODxDxX7oi4",
@@ -32,11 +32,12 @@ const defaultData = {
               time: '5',
               type: "rest",
               exname: "rest",
+              url:"",
               exlap: '1'
             },
             {
               id: "d12d43v",
-              time: '15',
+              time: '5',
               type: "wod",
               exname: "Burpees",
               url: "https://www.youtube.com/watch?v=Uy2nUNX38xE",
@@ -47,11 +48,15 @@ const defaultData = {
               time: '5',
               type: "rest",
               exname: "rest",
+              url:"",
               exlap: '2'
             }
           ]
         }
-    }
+    },
+    logs: [
+
+    ]
 }
 
 const get = (token) => {
@@ -88,8 +93,21 @@ const update = (token, workout) => {
   return db[token].workouts;
 }
 
+const addLog = (token, id) => {
+  db[token].logs.push(
+    {
+      id: Math.random().toString(36).substr(-8),
+      name: db[token].workouts[id].name,
+      date: Date.now(),
+      status: "Incomplete"
+    }
+  )
+  return db[token].logs;
+}
+
 module.exports = {
   get,
   add,
-  update
+  update,
+  addLog
 }

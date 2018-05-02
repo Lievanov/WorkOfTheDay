@@ -40,3 +40,14 @@ export const remove = (workout) =>
   fetch(`${api}/workouts/${workout.id}`, { method: 'DELETE', headers})
     .then(res => res.json())
     .then(data => data.workout)
+
+export const addLogs = (body) => {
+  return fetch(`${api}/startworkout/${body.id}`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }).then(res => res.json())
+}

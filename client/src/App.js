@@ -8,12 +8,13 @@ import ManageWorkout from './components/ManageWorkout';
 import StartWorkout from "./components/StartWorkout";
 import FooterComp from './components/Footer';
 import * as utils from './utils/utils';
+import WorkoutHistory from './components/WorkoutHistory';
 
 class App extends Component {
 
   state = {
       workouts: [],
-      workout: {}
+      history: []
     }
 
   componentDidMount(){
@@ -32,10 +33,17 @@ class App extends Component {
 
   updateWorkout = workout => {
     wodAPI.update(workout).then(workouts =>{
-      console.log("wk" + JSON.stringify(workouts));
       this.setState(state => ({
         workouts: utils.convertObjectoToArray(workouts)
       }))
+    })
+  }
+
+  addLogs = workout => {
+    wodAPI.addLogs(workout).then(histories => {
+      this.setState({
+        history: histories
+      })
     })
   }
 
@@ -47,7 +55,7 @@ class App extends Component {
   }
 
   render() {
-    const { workouts } = this.state;
+    const { workouts, history } = this.state;
     return (
       <div className="App">
         <Header />
@@ -90,8 +98,23 @@ class App extends Component {
           />
         )} />
       <Route exact path="/startworkout/:id"
-        component={StartWorkout}
+        render={(props) => (
+          <StartWorkout
+            {...props}
+            addingLog={(workout) => {
+              this.addLogs(workout);
+            }}
+          />
+        )}
       />
+    <Route exact path="/workout-history"
+      render={ () => (
+        <WorkoutHistory
+          history={history}
+        />
+      )}
+    />
+
     <FooterComp />
     </div>
     );

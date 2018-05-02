@@ -46,10 +46,8 @@ app.get('/workouts', (req, res) => {
 app.post('/workouts', bodyParser.json(), (req, res) => {
   const { name, laps, rest } = req.body
   if (name && laps && rest ) {
-    console.log("Creating...");
     res.send(db.add(req.token, req.body))
   } else {
-    console.log("Error");
     res.status(403).send({
       error: 'Please provide a name'
     })
@@ -59,14 +57,23 @@ app.post('/workouts', bodyParser.json(), (req, res) => {
 app.put('/workouts/:id', bodyParser.json(), (req, res) => {
   const {name, laps, rest } = req.body
   if(name && laps && rest){
-    console.log("Updating...");
     res.send(db.update(req.token, req.body))
   } else {
-    console.log('Error');
     res.status(403).send({ error: 'please provide a name'})
   }
 })
 
+app.post('/startworkout/:id', bodyParser.json(), (req, res) => {
+  const {id} = req.body;
+  if (id) {
+    res.send(db.addLog(req.token, id))
+  } else {
+    res.status(403).send({
+      error: 'Please provide a name'
+    })
+  }
+})
+
 app.listen(config.port, () => {
-  console.log('Server listening on port %s, Ctrl+C to stop', config.port)
+  console.log('WoD Server listening on port %s, Ctrl+C to stop', config.port)
 })
