@@ -21,3 +21,5 @@ Install the dependencies with the following command.
 $ npm install
 $ npm start
 ```
+
+* The application is using ports 3000 and 5000. Please make sure that those ports are available.

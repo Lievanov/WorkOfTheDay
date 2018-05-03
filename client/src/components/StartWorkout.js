@@ -69,11 +69,14 @@ class StartWorkout extends Component {
     }
 
     async tick(){
+      const { isRestLap, currentLap, nextLap, nextExercise, clock } = this.state;
       await this.setState(prevState => {
         return {clock: prevState.clock - 1}
       });
-      if(this.state.clock === 0){
-        if(this.state.nextExercise === ""){
+      if(clock === 0){
+        if(nextLap > currentLap && !isRestLap){
+          this.restBetweenLaps();
+        }else if(nextExercise === ""){
           clearInterval(this.interval);
           this.setState({done: true});
         }else
@@ -85,37 +88,39 @@ class StartWorkout extends Component {
       clearInterval(this.interval);
     }
 
+    restBetweenLaps = () =>{
+      this.setState({
+        clock: this.state.workout.rest,
+        isRestLap: true,
+        betweenLap: true,
+        ytAutoPlay: false
+      })
+    }
+
     exerciseChange = () => {
       const { exercises } = this.state.workout;
-      if(this.state.betweenLap){
-        this.setState({
-          isRestLap: true,
-          betweenLap: false,
-          ytAutoPlay: false,
-          clock: this.state.workout.rest
-        })
-      } else {
-        this.setState(prevState => {
-          return {
-            name: exercises[prevState.counter + 1].exname,
-            clock: exercises[prevState.counter + 1].time,
-            type: exercises[prevState.counter + 1].type,
-            url: exercises[prevState.counter + 1].url,
-            currentLap: exercises[prevState.counter + 1].exlap,
-            previousExercise: exercises[prevState.counter].exname,
-            ytAutoPlay: exercises[prevState.counter].exname === "rest" ? false : true,
-            counter: prevState.counter + 1,
-            isRestLap: false
-          }
-        })
-        if(exercises[this.state.counter+1] !== undefined){
-          this.setState(prevState => {return {
-            nextExercise: exercises[prevState.counter + 1].exname,
-            betweenLap: exercises[prevState.counter + 1].exlap > this.state.currentLap ? (this.state.currentLap > 0 ? true : false) : false
-          }});
-        } else {
-          this.setState({ nextExercise: '' });
+      this.setState(prevState => {
+        return {
+          name: exercises[prevState.counter + 1].exname,
+          clock: exercises[prevState.counter + 1].time,
+          type: exercises[prevState.counter + 1].type,
+          url: exercises[prevState.counter + 1].url,
+          currentLap: exercises[prevState.counter + 1].exlap,
+          previousExercise: exercises[prevState.counter].exname,
+          ytAutoPlay: exercises[prevState.counter].exname === "rest" ? false : true,
+          counter: prevState.counter + 1,
+          isRestLap: false,
+          betweenLap: false
         }
+      })
+      if(exercises[this.state.counter+1] !== undefined){
+        this.setState(prevState => {return {
+          nextExercise: exercises[prevState.counter + 1].exname,
+          nextLap: exercises[prevState.counter + 1].exlap
+          //betweenLap: exercises[prevState.counter + 1].exlap > this.state.currentLap ? (this.state.currentLap > 0 ? true : false) : false
+        }});
+      } else {
+        this.setState({ nextExercise: '', nextLap: '' });
       }
     }
 

@@ -29,7 +29,7 @@ class ListExercise extends Component {
                     <td>{e.exname}</td>
                     {i!==0 && <td>{e.exlap}</td> }
                     <td>{e.time} segs</td>
-                    <td><a href={`${e.url}`} target="_blank"><Icon small >video_library</Icon></a></td>
+                    {(e.url && <td><a href={`${e.url}`} target="_blank"><Icon small >video_library</Icon></a></td>) || <td></td>}
                     <td><Button type="button" onClick={() => onDeleteExercise(e.id)}><Icon>delete_forever</Icon></Button></td>
                   </tr>
                 ))}
