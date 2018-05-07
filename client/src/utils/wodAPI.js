@@ -1,4 +1,3 @@
-//const api = 'http://wod-db.lievanov.c9users.io'
 const api = 'http://localhost:5000'
 
 let token = localStorage.token
@@ -41,8 +40,13 @@ export const remove = (workout) =>
     .then(res => res.json())
     .then(data => data.workout)
 
-export const addLogs = (body) => {
-  return fetch(`${api}/startworkout/${body.id}`, {
+export const getLogs = () =>
+  fetch(`${api}/workouts`, { headers })
+    .then(res => res.json())
+    .then(data => data.logs)
+
+export const addLogs = (body, logId, status) => {
+  return fetch(`${api}/logs/${body.id}/${logId}/${status}`, {
     method: 'POST',
     headers: {
       ...headers,

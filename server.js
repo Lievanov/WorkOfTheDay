@@ -17,10 +17,6 @@ app.get('/', (req, res) => {
 
     fetch(url, { headers: { 'Authorization': 'whatever-you-want' }})
 
-    The available routes are:
-
-    GET /workouts
-    POST /workouts { name, email, avatarURL }
   </pre>
   `
   res.send(help)
@@ -63,13 +59,12 @@ app.put('/workouts/:id', bodyParser.json(), (req, res) => {
   }
 })
 
-app.post('/startworkout/:id', bodyParser.json(), (req, res) => {
-  const {id} = req.body;
-  if (id) {
-    res.send(db.addLog(req.token, id))
+app.post('/logs/:id/:logId/:status', bodyParser.json(), (req, res) => {
+  if (req.body) {
+    res.send(db.addLog(req.token, req.body, req.params.logId, req.params.status))
   } else {
     res.status(403).send({
-      error: 'Please provide a name'
+      error: 'Please provide an ID'
     })
   }
 })

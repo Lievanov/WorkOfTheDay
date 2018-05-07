@@ -24,19 +24,20 @@ class StartWorkout extends Component {
       done: false,
       betweenLap: false,
       ytAutoPlay: true,
-      isRestLap: false
+      isRestLap: false,
+      logId: ''
     }
 
 
     async componentDidMount(){
         const { match: {params}, addingLog } = this.props;
-
         await wodAPI.getAll().then((workouts) => {
             this.setState({
               workout: workouts[params.id]
             });
         })
-        const { exercises } = this.state.workout;
+        const { exercises } = this.state.workout,
+          logId = Math.random().toString(36).substr(-8);
         this.setState({
           name: exercises[0].exname,
           type: exercises[0].type,
@@ -44,10 +45,10 @@ class StartWorkout extends Component {
           laps: this.state.workout.laps,
           currentLap: exercises[0].exlap,
           clock: exercises[0].time,
-          nextExercise: exercises[1].exname || ""
+          nextExercise: exercises[1] ? exercises[1].exname : "",
+          logId
         });
-        //Create logs
-        addingLog(this.state.workout);
+        addingLog(this.state.workout, logId, "Incomplete");
     }
 
     startExercise = () =>{
@@ -69,7 +70,7 @@ class StartWorkout extends Component {
     }
 
     async tick(){
-      const { isRestLap, currentLap, nextLap, nextExercise, clock } = this.state;
+      const { isRestLap, currentLap, nextLap, nextExercise, clock, workout, logId } = this.state;
       await this.setState(prevState => {
         return {clock: prevState.clock - 1}
       });
@@ -78,6 +79,7 @@ class StartWorkout extends Component {
           this.restBetweenLaps();
         }else if(nextExercise === ""){
           clearInterval(this.interval);
+          this.props.addingLog(workout, logId, "Complete");
           this.setState({done: true});
         }else
           await this.exerciseChange();
@@ -117,7 +119,6 @@ class StartWorkout extends Component {
         this.setState(prevState => {return {
           nextExercise: exercises[prevState.counter + 1].exname,
           nextLap: exercises[prevState.counter + 1].exlap
-          //betweenLap: exercises[prevState.counter + 1].exlap > this.state.currentLap ? (this.state.currentLap > 0 ? true : false) : false
         }});
       } else {
         this.setState({ nextExercise: '', nextLap: '' });
@@ -131,7 +132,7 @@ class StartWorkout extends Component {
 
         return (
           <div>
-          {(this.state.done && <div className="well-done"><h1>Workout complete! Well done!</h1></div>) ||
+          {(this.state.done && <div className="well-done"><h1>Workout complete! Well done!</h1><br /><br /><br /><br /><br /><br /></div>) ||
             <div>
               <Row>
                 <Col m={12}><div className="start-workout"><h3>Today's Workout: <div className="workout-title">{workout.name}</div></h3></div></Col>

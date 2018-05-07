@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import dateFormat from 'dateformat';
 
 class WorkoutHistory extends Component {
 
@@ -18,13 +19,14 @@ class WorkoutHistory extends Component {
           <tbody>
             { history.map(workout => (
                 <tr key={workout.id}>
-                  <td>{workout.date}</td>
-                  <td>{workout.date}</td>
+                  <td>{workout.name}</td>
+                  <td>{dateFormat(workout.date)}</td>
                   <td>{workout.status}</td>
                 </tr>
             ))}
           </tbody>
         </table>
+        <br /><br /><br /><br /><br /><br /><br /><br />
       </div>
     );
   }

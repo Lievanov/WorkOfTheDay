@@ -102,9 +102,20 @@ const defaultData = {
           ]
         }
     },
-    logs: [
-
-    ]
+    logs: {
+      "daojwih3": {
+        id: 'daojwih3',
+        name: "Burpees and Push ups",
+        date: Date.parse("March 21, 2018 12:37:50"),
+        status: "Incomplete"
+      },
+      "cruh5632d": {
+        id: 'cruh5632d',
+        name: "Burpees and Push ups",
+        date: Date.parse("May 08, 2018 05:00:00"),
+        status: "Complete"
+      }
+    }
 }
 
 const get = (token) => {
@@ -141,16 +152,14 @@ const update = (token, workout) => {
   return db[token].workouts;
 }
 
-const addLog = (token, id) => {
-  db[token].logs.push(
-    {
-      id: Math.random().toString(36).substr(-8),
-      name: db[token].workouts[id].name,
-      date: Date.now(),
-      status: "Incomplete"
-    }
-  )
-  return db[token].logs;
+const addLog = (token, workout, logId, status) => {
+  db[token].logs[logId] = {
+    id: logId,
+    name: workout.name,
+    date: Date.now(),
+    status
+  }
+  return db[token].logs[logId];
 }
 
 module.exports = {

@@ -22,6 +22,10 @@ class App extends Component {
       const workoutsList = utils.convertObjectoToArray(workouts);
       this.setState({ workouts: workoutsList });
     })
+    wodAPI.getLogs().then((logs) => {
+      const LogHistory = utils.convertObjectoToArray(logs);
+      this.setState({ history: LogHistory });
+    })
   }
   createWorkout = workout => {
     wodAPI.create(workout).then(w =>{
@@ -39,11 +43,18 @@ class App extends Component {
     })
   }
 
-  addLogs = workout => {
-    wodAPI.addLogs(workout).then(histories => {
-      this.setState({
-        history: histories
-      })
+  addLogs = (workout, logId, status) => {
+    wodAPI.addLogs(workout, logId, status).then(log => {
+      if(status === "Incomplete"){
+        this.setState(state => ({
+          history: state.history.concat([log])
+        }))
+      } else if (status === "Complete"){
+        wodAPI.getLogs().then((logs) => {
+          const LogHistory = utils.convertObjectoToArray(logs);
+          this.setState({ history: LogHistory });
+        })
+      }
     })
   }
 
@@ -58,12 +69,11 @@ class App extends Component {
     const { workouts, history } = this.state;
     return (
       <div className="App">
-        <Header />
+        <Header history={history}/>
         <Route exact path="/" render={() => (
           <div>
             <div>
               <Card className="main-banner">
-                <h3 className="main-title">Work of the day</h3>
               </Card>
               <br/>
               <ListWorkouts
@@ -71,9 +81,9 @@ class App extends Component {
                 onEditWorkout={this.editWorkout}
                 onDeleteWorkout={this.deleteWorkout}
                 />
-              <br />
-            </div>
+              <br /><br /><br /><br /><br /><br />
 
+            </div>
           </div>
         )}/>
       <Route exact path="/workout/" render={({history}) => (
@@ -101,8 +111,8 @@ class App extends Component {
         render={(props) => (
           <StartWorkout
             {...props}
-            addingLog={(workout) => {
-              this.addLogs(workout);
+            addingLog={(workout, logId, status) => {
+              this.addLogs(workout, logId, status);
             }}
           />
         )}
@@ -114,8 +124,7 @@ class App extends Component {
         />
       )}
     />
-
-    <FooterComp />
+  <FooterComp />
     </div>
     );
   }

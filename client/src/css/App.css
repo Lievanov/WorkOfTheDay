@@ -1,5 +1,12 @@
+#root {
+  background-color: #eceff1;
+  height: 100%;
+  min-height: 100%;
+}
+
 .App {
   padding: 0 7% 0 7%;
+  background-color: #eceff1;
 }
 
 .workout-banner {
@@ -104,10 +111,14 @@
 }
 
 .footer {
-  background: #42A5F5;
+  background: #00b8d4;
   height: 30px;
   color: white;
   text-align: center;
   line-height: 50px;
   padding: 0 20px;
+
+  left: 0;
+  width: 100%;
+
 }
